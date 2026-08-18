@@ -1,0 +1,387 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-canvas: #09090b;
+  --color-panel: #18181b;
+  --color-raised: #202023;
+  --color-hairline: #27272a;
+  --color-hairline-strong: #3f3f46;
+  --color-muted: #a1a1aa;
+  --color-subtle: #71717a;
+  --color-ink: #f4f4f5;
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-accent-ink: #c7d2fe;
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-ok: #4ade80;
+
+  --radius-panel: 0.5rem;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  height: 100%;
+  background-color: var(--color-canvas);
+}
+
+body {
+  min-height: 100%;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+* {
+  scrollbar-color: var(--color-hairline-strong) transparent;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-hairline-strong);
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes chat-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.chat-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-shimmer-text {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-muted) 0%,
+    var(--color-ink) 45%,
+    var(--color-muted) 90%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  color: transparent;
+  animation: chat-shimmer 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-shimmer-text {
+    animation: none;
+    color: var(--color-muted);
+    background-image: none;
+  }
+}
+
+/* —— Login page —— */
+
+.login-shell {
+  position: relative;
+  display: flex;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem 1rem;
+}
+
+.login-bg {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.login-bg-base {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 0%, rgba(99, 102, 241, 0.16), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 15% 85%, rgba(39, 39, 42, 0.85), transparent 65%),
+    radial-gradient(ellipse 45% 40% at 90% 70%, rgba(24, 24, 27, 0.9), transparent 60%),
+    var(--color-canvas);
+  animation: login-bg-drift 28s ease-in-out infinite alternate;
+}
+
+.login-bg-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(to right, rgba(39, 39, 42, 0.7) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(39, 39, 42, 0.7) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 45%, black 20%, transparent 75%);
+  animation: login-grid-drift 40s linear infinite;
+}
+
+.login-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  will-change: transform;
+}
+
+.login-bg-orb-a {
+  top: 12%;
+  left: 18%;
+  width: min(42vw, 320px);
+  height: min(42vw, 320px);
+  background: rgba(99, 102, 241, 0.12);
+  animation: login-orb-a 22s ease-in-out infinite alternate;
+}
+
+.login-bg-orb-b {
+  right: 10%;
+  bottom: 8%;
+  width: min(48vw, 380px);
+  height: min(48vw, 380px);
+  background: rgba(63, 63, 70, 0.35);
+  animation: login-orb-b 26s ease-in-out infinite alternate;
+}
+
+.login-bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+.login-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 22rem;
+  animation: login-card-enter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-card {
+  border: 1px solid var(--color-hairline);
+  border-radius: 0.75rem;
+  background: color-mix(in oklab, var(--color-panel) 92%, transparent);
+  padding: 1.75rem 1.5rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 24px 48px -20px rgba(0, 0, 0, 0.65),
+    0 8px 16px -8px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 640px) {
+  .login-card {
+    padding: 2rem 1.75rem;
+  }
+}
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+  text-align: center;
+  animation: login-brand-enter 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.login-brand-mark {
+  display: flex;
+  width: 2.25rem;
+  height: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-hairline);
+  border-radius: 0.5rem;
+  background: var(--color-raised);
+  color: var(--color-accent);
+}
+
+.login-brand-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.login-input {
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.login-input:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent);
+}
+
+.login-error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
+.login-submit {
+  margin-top: 0.25rem;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.login-submit:not(:disabled):hover {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-accent) 40%, transparent);
+  transform: translateY(-1px);
+}
+
+.login-submit:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.login-submit:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 28%, transparent);
+}
+
+@keyframes login-bg-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(-2.5%, 1.5%, 0) scale(1.04);
+  }
+}
+
+@keyframes login-grid-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-44px, -44px, 0);
+  }
+}
+
+@keyframes login-orb-a {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(12%, 18%, 0);
+  }
+}
+
+@keyframes login-orb-b {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-14%, -10%, 0);
+  }
+}
+
+@keyframes login-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes login-brand-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-bg-base,
+  .login-bg-grid,
+  .login-bg-orb-a,
+  .login-bg-orb-b,
+  .login-stage,
+  .login-brand {
+    animation: none;
+  }
+
+  .login-stage,
+  .login-brand {
+    opacity: 1;
+    transform: none;
+  }
+
+  .login-submit:not(:disabled):hover,
+  .login-submit:not(:disabled):active {
+    transform: none;
+  }
+}
